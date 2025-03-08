@@ -1,0 +1,4 @@
+name: MixBukkit
+version: '1.0'
+main: gg.damia.mixbukkit.MixBukkit
+api-version: '1.21'
