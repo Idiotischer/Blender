@@ -8,53 +8,6 @@ This document is outdated. Require an update.
 2. Some basic Reflection knowledge
 3. Understand that doing hacky things like this won't make your plugin cross version support, unless you do things other than things I mentioned in this tutorial.
 
-## Add Dependency
-We haven't published an artifact to any repository yet, but you can install it to your
-local maven repository or add it as a system scoped library.
-### Method 1: Build & Install it to your maven repository
-1. Clone this repository:
-```shell
-$ git clone https://github.com/DragonCommissions/MixBukkit
-```
-2. Build MixBukkit project:
-```shell
-$ mvn clean package install
-```
-> Note: Install maven `mvn` command doesn't work
-3. Add MixBukkit to your project dependencies:
-```xml
-<dependency>
-    <groupId>com.dragoncommissions</groupId>
-    <artifactId>MixBukkit</artifactId>
-    <version>1.0-SNAPSHOT</version>
-    <scope>provided</scope>
-</dependency>
-```
-
-### Method 2: Install it from command line
-```shell
-$ mvn install:install-file -Dfile=<path to MixBukkit.jar (plugin file)> -DgroupId=com.dragoncommissions -DartifactId=MixBukkit -Dversion=1.0-SNAPSHOT -Dpackaging=jar
-```
-```xml
-<dependency>
-    <groupId>com.dragoncommissions</groupId>
-    <artifactId>MixBukkit</artifactId>
-    <version>1.0-SNAPSHOT</version>
-    <scope>provided</scope>
-</dependency>
-```
-
-### Method 3: Add the plugin jar as library
-```xml
-<dependency>
-    <groupId>com.dragoncommissions</groupId>
-    <artifactId>MixBukkit</artifactId>
-    <version>1.0-SNAPSHOT</version>
-    <scope>system</scope>
-    <systemPath>${basedir}/"relative path to MixBukkit.jar"</systemPath>
-</dependency>
-```
-
 > Note: You don't need to shade MixBukkit, shading it won't work.
 
 ## Create your first mixin
