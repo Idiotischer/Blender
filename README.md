@@ -11,9 +11,7 @@
 **Comign soon...**
 
 ## Compatibility Matrix
-**NOTE: THIS REQUIRES AT LEAST JAVA 9 FOR IT TO RUN**
-**IN ORDER TO GET IT RUNNING ON OLDER VERSIONS SET use-native-transport=false
-IN THE server.properties TO true** 
+**NOTE: THIS REQUIRES AT LEAST JAVA 9 FOR IT TO RUN IN ORDER TO GET IT RUNNING ON OLDER VERSIONS SET use-native-transport=false IN THE server.properties TO true** 
 
 | Minecraft Version | Supported | With Paper (use-native-transport=false) |
 |-------------------|-----------|-----------------------------------------|
