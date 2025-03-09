@@ -9,3 +9,11 @@
 ## A SMALL INSTALLATION GUIDE CAN BE FOUND HERE
 
 **Comign soon...**
+## Compatibility Matrix
+
+| Minecraft Version | Supported | With Paper (use-native-transport=false) |
+|-------------------|-----------|-----------------------------------------|
+| 1.20.x            | ✅        | ✅                                     |
+| 1.19.x            | ✅        | ✅                                     |
+| 1.18.x            | ✅        | ✅                                     |
+| 1.17.x            | ✅        | ✅                                     |
