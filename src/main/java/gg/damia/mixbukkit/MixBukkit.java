@@ -41,8 +41,6 @@ public class MixBukkit extends JavaPlugin {
     @Getter
     private static JVMAttacher jvmAttacher;
 
-    public static ClassesManager classesManager;
-
     @Getter
     private static final Map<String, MixinPlugin> plugins = new HashMap<>();
 
@@ -81,7 +79,7 @@ public class MixBukkit extends JavaPlugin {
         getServer().getConsoleSender().sendMessage(ChatColor.YELLOW  + "");
         getServer().getConsoleSender().sendMessage(ChatColor.YELLOW  + "~~ Started loading ~~");
         getServer().getConsoleSender().sendMessage(ChatColor.YELLOW  + " - Attaching to JVM...");
-        jvmAttacher = new JVMAttacher(this);
+        jvmAttacher = new JVMAttacher();
         jvmAttacher.attach();
         if (INSTRUMENTATION == null) {
             setEnabled(false);

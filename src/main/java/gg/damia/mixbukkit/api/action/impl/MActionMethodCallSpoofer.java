@@ -1,5 +1,6 @@
 package gg.damia.mixbukkit.api.action.impl;
 
+import gg.damia.mixbukkit.MixBukkit;
 import gg.damia.mixbukkit.api.action.MixinAction;
 import gg.damia.mixbukkit.api.shellcode.impl.inner.IShellCodeReflectionMethodInvoke;
 import gg.damia.mixbukkit.utils.ASMUtils;
@@ -16,11 +17,11 @@ import java.util.function.Predicate;
 @SuppressWarnings("Untested")
 public class MActionMethodCallSpoofer implements MixinAction {
 
-    private Method method;
-    private String key;
+    private final Method method;
+    private final String key;
     private Predicate<Integer> filter;
 
-    private static Map<String, ReturnValueGetter> getters = new HashMap<>();
+    private static final Map<String, ReturnValueGetter> getters = new HashMap<>();
 
     public static Object get(String value) {
         return getters.get(value).getReturnValue();
@@ -32,10 +33,12 @@ public class MActionMethodCallSpoofer implements MixinAction {
         UUID uuid = UUID.randomUUID();
         while (getters.containsKey(uuid.toString())) {
             uuid = UUID.randomUUID();
-            System.out.println("Come on! You are so f**king lucky! You literally got same UUID, how?");
-            System.out.println("If you see this message without cheating, today is literally your most luckiest day");
-            System.out.println("I would say the chance of it is lower than every thing you can think of");
-            System.out.println("UUID: " + uuid);
+            if(MixBukkit.DEBUG) {
+                System.out.println("Come on! You are so f**king lucky! You literally got same UUID, how?");
+                System.out.println("If you see this message without cheating, today is literally your most luckiest day");
+                System.out.println("I would say the chance of it is lower than every thing you can think of");
+                System.out.println("UUID: " + uuid);
+            }
         }
         getters.put(uuid.toString(), returnValueGetter);
         this.key = uuid.toString();

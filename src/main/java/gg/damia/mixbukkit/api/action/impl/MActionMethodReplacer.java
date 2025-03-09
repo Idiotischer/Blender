@@ -6,6 +6,7 @@ import gg.damia.mixbukkit.api.shellcode.impl.inner.IShellCodeReflectionMethodInv
 import gg.damia.mixbukkit.utils.ASMUtils;
 import javassist.bytecode.Opcode;
 import lombok.SneakyThrows;
+import org.bukkit.Bukkit;
 import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.InsnNode;
 import org.objectweb.asm.tree.MethodNode;
@@ -17,7 +18,7 @@ import java.lang.reflect.Method;
  **/
 public class MActionMethodReplacer implements MixinAction {
 
-    private Method handler;
+    private final Method handler;
 
     public MActionMethodReplacer(Method handler) {
         this.handler = handler;
@@ -51,7 +52,8 @@ public class MActionMethodReplacer implements MixinAction {
         } else {
             Class<?> returnType = ASMUtils.getReturnType(methodNode.desc);
             if (returnType != handler.getReturnType()) {
-                throw new IllegalArgumentException("Handler: " + handler.getName() + " is not returning same type as target method (" + handler.getReturnType().getName() + "(return type of handler) != " + returnType.getName() + "(return type of target))");
+                Bukkit.getLogger().warning("Handler: " + handler.getName() + " is not returning same type as target method (" + handler.getReturnType().getName() + "(return type of handler) != " + returnType.getName() + "(return type of target))");
+                return;
             }
 
             InsnList out = new InsnList();

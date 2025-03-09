@@ -11,13 +11,11 @@ import lombok.Setter;
 import lombok.SneakyThrows;
 import org.objectweb.asm.tree.*;
 
+@Setter
+@Getter
 public class CallbackInfo {
 
-    @Getter
-    @Setter
     private Object returnValue = null;
-    @Getter
-    @Setter
     private boolean returned;
 
     @SneakyThrows

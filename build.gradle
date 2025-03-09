@@ -8,20 +8,21 @@ version = '1.0'
 
 repositories {
     mavenCentral()
-    maven {
-        name = "papermc-repo"
-        url = "https://repo.papermc.io/repository/maven-public/"
-    }
+
     maven {
         name = "sonatype"
         url = "https://oss.sonatype.org/content/groups/public/"
     }
 
     maven { url 'https://jitpack.io' }
+
+    maven { url "https://hub.spigotmc.org/nexus/content/repositories/snapshots/" }
+
+    mavenLocal()
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.21-R0.1-SNAPSHOT")
+    compileOnly "org.spigotmc:spigot-api:1.12-R0.1-SNAPSHOT"
     implementation "org.projectlombok:lombok:1.18.36"
     annotationProcessor "org.projectlombok:lombok:1.18.36"
     implementation "org.ow2.asm:asm:9.2"
@@ -32,7 +33,7 @@ dependencies {
     implementation 'org.eclipse.jgit:org.eclipse.jgit:7.1.0.202411261347-r'
 }
 
-def targetJavaVersion = 21
+def targetJavaVersion = 9
 java {
     def javaVersion = JavaVersion.toVersion(targetJavaVersion)
     sourceCompatibility = javaVersion

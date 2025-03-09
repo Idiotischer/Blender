@@ -5,6 +5,7 @@ import gg.damia.mixbukkit.api.action.MixinAction;
 import gg.damia.mixbukkit.api.shellcode.impl.inner.IShellCodeMethodInvoke;
 import gg.damia.mixbukkit.utils.ASMUtils;
 import javassist.bytecode.Opcode;
+import org.bukkit.Bukkit;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.VarInsnNode;
 
@@ -12,12 +13,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
 public class MActionCallSuper implements MixinAction {
-
-    private MixinPlugin plugin;
-
-    public MActionCallSuper(MixinPlugin plugin) {
-        this.plugin = plugin;
-    }
 
     @Override
     public void action(Class<?> owner, MethodNode method) {
@@ -44,7 +39,8 @@ public class MActionCallSuper implements MixinAction {
             }
         }
         if (superMethod == null) {
-            throw new IllegalArgumentException("Could not find super method in " + owner.getSimpleName());
+            Bukkit.getLogger().warning("Could not find super method in " + owner.getSimpleName());
+            return;
         }
         method.instructions.clear();
         int varNum = 0;

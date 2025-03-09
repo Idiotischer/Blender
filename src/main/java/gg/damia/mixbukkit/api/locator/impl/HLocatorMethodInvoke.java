@@ -13,11 +13,11 @@ import java.util.function.Predicate;
 
 public class HLocatorMethodInvoke implements HookLocator {
 
-    private String owner;
-    private String desc;
-    private String name;
-    private PostPreState state;
-    private Predicate<Integer> filter;
+    private final String owner;
+    private final String desc;
+    private final String name;
+    private final PostPreState state;
+    private final Predicate<Integer> filter;
 
     public HLocatorMethodInvoke(Method method, PostPreState state, Predicate<Integer> filter) {
         owner = method.getDeclaringClass().getName().replace(".", "/");

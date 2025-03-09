@@ -207,36 +207,39 @@ public class ASMUtils {
 
     @SneakyThrows
     public static Class<?> descriptorToClass(String s) {
-        Class<?> type = null;
+        Class<?> type;
         switch (s) {
-            case "Z" :
+            case "Z":
                 type = boolean.class;
                 break;
-            case "C" :
+            case "C":
                 type = char.class;
                 break;
-            case "B" :
+            case "B":
                 type = byte.class;
                 break;
-            case "S" :
+            case "S":
                 type = short.class;
                 break;
-            case "I" :
+            case "I":
                 type = int.class;
                 break;
-            case "J" :
+            case "J":
                 type = long.class;
                 break;
-            case "F" :
+            case "F":
                 type = float.class;
                 break;
-            case "D" :
+            case "D":
                 type = double.class;
                 break;
-            case "V" :
+            case "V":
                 type = void.class;
                 break;
+            default:
+                type = null;
         }
+
         if (s.startsWith("L")) {
             type = Class.forName(s.substring(1, s.length()-1));
         }

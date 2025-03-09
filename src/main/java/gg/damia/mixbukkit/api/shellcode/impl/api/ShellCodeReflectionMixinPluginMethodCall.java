@@ -19,7 +19,6 @@ import java.lang.reflect.Method;
         requireVarManager = true,
         requireMethodNodeModification = true,
         stacksContent = {"Return value of invoked method (as Object)"},
-        requiredStacksContent = {},
         calledDirectly = true
 )
 @AllArgsConstructor

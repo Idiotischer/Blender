@@ -9,13 +9,6 @@ import java.io.File;
 import java.lang.management.ManagementFactory;
 
 public class JVMAttacher {
-
-    private MixBukkit mixBukkit;
-
-    public JVMAttacher(MixBukkit mixBukkit) {
-        this.mixBukkit = mixBukkit;
-    }
-
     @SneakyThrows
     public void attach() {
         JVMSelfAttach.init(new File(System.getProperty("java.io.tmpdir")));
