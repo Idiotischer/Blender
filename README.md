@@ -1,4 +1,4 @@
-![MixBukkit](https://raw.githubusercontent.com/DragonCommissions/MixBukkit/master/MixBukkit.png)
+![grafik](https://github.com/user-attachments/assets/06653133-9c0c-4633-b571-4decec58daaa)![MixBukkit](https://raw.githubusercontent.com/DragonCommissions/MixBukkit/master/MixBukkit.png)
 ##
 
 ## NOTES: THIS IS NOT FULLY RELEASED YET AND WASN'T UPDATED IN 3 YEARS!
@@ -8,11 +8,12 @@
 
 ## A SMALL INSTALLATION GUIDE CAN BE FOUND HERE
 
-*1. Please use the following JVM Flags
-
+1. Please use the following JVM Flags
+```
     -Djdk.attach.allowAttachSelf=true
     --add-opens=java.base/java.lang=ALL-UNNAMED
     --add-opens=java.base/jdk.internal.loader=ALL-UNNAMED
+```
 
 ## Compatibility Matrix
 **NOTE: THIS REQUIRES AT LEAST JAVA 9 FOR IT TO RUN IN ORDER TO GET IT RUNNING ON OLDER VERSIONS SET use-native-transport=false IN THE server.properties TO true** 
