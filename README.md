@@ -1,4 +1,4 @@
-![grafik](https://github.com/user-attachments/assets/06653133-9c0c-4633-b571-4decec58daaa)![MixBukkit](https://raw.githubusercontent.com/DragonCommissions/MixBukkit/master/MixBukkit.png)
+![MixBukkit](https://raw.githubusercontent.com/DragonCommissions/MixBukkit/master/MixBukkit.png)
 ##
 
 ## NOTES: THIS IS NOT FULLY RELEASED YET AND WASN'T UPDATED IN 3 YEARS!
