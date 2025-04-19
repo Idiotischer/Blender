@@ -8,11 +8,11 @@
 
 ## A SMALL INSTALLATION GUIDE CAN BE FOUND HERE
 
-*1. Please use the following JVM Flags 
+*1. Please use the following JVM Flags
 
     -Djdk.attach.allowAttachSelf=true
     --add-opens=java.base/java.lang=ALL-UNNAMED
-    --add-opens=java.base/jdk.internal.loader=ALL-UNNAMED *
+    --add-opens=java.base/jdk.internal.loader=ALL-UNNAMED
 
 ## Compatibility Matrix
 **NOTE: THIS REQUIRES AT LEAST JAVA 9 FOR IT TO RUN IN ORDER TO GET IT RUNNING ON OLDER VERSIONS SET use-native-transport=false IN THE server.properties TO true** 
