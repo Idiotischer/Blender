@@ -8,7 +8,7 @@
 
 ## A SMALL INSTALLATION GUIDE CAN BE FOUND HERE
 
-**1. Please use the following JVM Flags 
+*1. Please use the following JVM Flags 
 
     -Djdk.attach.allowAttachSelf=true
     --add-opens=java.base/java.lang=ALL-UNNAMED
