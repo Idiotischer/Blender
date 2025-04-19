@@ -10,9 +10,9 @@
 
 1. Please use the following JVM Flags
 ```
-    -Djdk.attach.allowAttachSelf=true
-    --add-opens=java.base/java.lang=ALL-UNNAMED
-    --add-opens=java.base/jdk.internal.loader=ALL-UNNAMED
+-Djdk.attach.allowAttachSelf=true
+--add-opens=java.base/java.lang=ALL-UNNAMED
+--add-opens=java.base/jdk.internal.loader=ALL-UNNAMED
 ```
 
 ## Compatibility Matrix
