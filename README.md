@@ -13,6 +13,10 @@
 -Djdk.attach.allowAttachSelf=true
 --add-opens=java.base/java.lang=ALL-UNNAMED
 --add-opens=java.base/jdk.internal.loader=ALL-UNNAMED
+--add-opens=java.base/sun.reflect=ALL-UNNAMED
+--add-opens=java.management/sun.management=ALL-UNNAMED
+--add-opens=java.base/java.io=ALL-UNNAMED
+--add-opens=java.base/java.util=ALL-UNNAMED
 ```
 
 ## Compatibility Matrix
