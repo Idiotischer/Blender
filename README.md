@@ -8,7 +8,7 @@
 
 ## A SMALL INSTALLATION GUIDE CAN BE FOUND HERE
 
-1. Please use the following JVM Flags (for now you can leave most of them out except for the sun and some jdk.internal ones)
+1. Please use the following starting Flags
 ```
 -Djdk.attach.allowAttachSelf=true
 --add-opens=java.base/sun.reflect=ALL-UNNAMED
