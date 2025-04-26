@@ -1,4 +1,4 @@
-![MixBukkit](https://raw.githubusercontent.com/Idiotischer/Blender/master/BlenderLogo.png)
+![MixBukkit](BlenderLogo.png)
 ##
 
 ## NOTES: THIS IS NOT FULLY RELEASED YET AND WASN'T UPDATED IN 3 YEARS!
