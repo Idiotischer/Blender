@@ -8,10 +8,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.InsnList;
+import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 
 import java.util.List;
+
+import static org.objectweb.asm.Opcodes.INVOKESPECIAL;
 
 @AllArgsConstructor
 @Getter
@@ -66,14 +70,25 @@ public class MActionInsertShellCode implements MixinAction {
         LocalVarManager localVarManager = new LocalVarManager(method);
 
         InsnList newInstructions = new InsnList();
+        boolean superCalled = false;
 
         for (int i = 0; i < method.instructions.size(); i++) {
-            if (hooks.contains(i)) {
+            AbstractInsnNode insn = method.instructions.get(i);
+
+            if (!superCalled && insn.getOpcode() == INVOKESPECIAL) {
+                MethodInsnNode mInsn = (MethodInsnNode) insn;
+                if (mInsn.name.equals("<init>") && !mInsn.owner.equals(owner.getName().replace('.', '/'))) {
+                    superCalled = true;
+                }
+            }
+
+            newInstructions.add(insn);
+
+            if (superCalled && hooks.contains(i)) {
                 if (shellCode.getShellCodeInfo().calledDirectly()) {
                     try {
                         InsnList instructions = shellCode.generate(method, localVarManager);
                         newInstructions.add(instructions);
-
                         newInstructions.add(shellCode.popExtraStack());
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -83,9 +98,9 @@ public class MActionInsertShellCode implements MixinAction {
                     Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[!] Shell Code \"" + ChatColor.YELLOW + shellCode.getShellCodeInfo().name() + ChatColor.RED + "\" shouldn't be called directly (calledDirectly = false)");
                 }
             }
-            newInstructions.add(method.instructions.get(i));
         }
 
         method.instructions = newInstructions;
     }
+
 }
