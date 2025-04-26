@@ -1,4 +1,4 @@
-![MixBukkit](https://raw.githubusercontent.com/DragonCommissions/MixBukkit/master/MixBukkit.png)
+![MixBukkit](BlenderLogo.png)
 ##
 
 ## NOTES: THIS IS NOT FULLY RELEASED YET AND WASN'T UPDATED IN 3 YEARS!
