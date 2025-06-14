@@ -36,3 +36,6 @@
 | 1.8.x             | ❌        | ✅                                     |
 | 1.7.x             | ❌        | ***Not Tested***                        |
 
+You *can* also try -DPaper.IgnoreJavaVersion=true
+though it's **not tested**
+
