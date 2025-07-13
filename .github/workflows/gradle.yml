@@ -13,7 +13,7 @@ on:
         default: 'release'
 
 jobs:
-  build:
+    build:
     runs-on: ubuntu-latest
     
     steps:
@@ -39,7 +39,7 @@ jobs:
       run: ./gradlew clean build
 
     - name: Upload JAR artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: my-app-jar
         path: build/libs/*.jar
@@ -54,7 +54,7 @@ jobs:
 
     steps:
     - name: Download JAR artifact from build job
-      uses: actions/upload-artifact@v4
+      uses: actions/download-artifact@v3
       with:
         name: my-app-jar
 
@@ -69,8 +69,12 @@ jobs:
         draft: false
         prerelease: false
 
-    - name: Upload JAR artifact
-      uses: actions/upload-artifact@v4
+    - name: Upload JAR to Release
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        name: Blender-1.${{ github.run_number }}
-        path: build/libs/*.jar
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./my-app-jar/*.jar
+        asset_name: my-app.jar
+        asset_content_type: application/java-archive
