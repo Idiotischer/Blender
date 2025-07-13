@@ -64,17 +64,13 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: v1.0.${{ github.run_number }}
+        tag_name: v1.${{ github.run_number }}
         release_name: Release v1.0.${{ github.run_number }}
         draft: false
         prerelease: false
 
-    - name: Upload JAR to Release
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Upload JAR artifact
+      uses: actions/upload-artifact@v4
       with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./my-app-jar/*.jar
-        asset_name: my-app.jar
-        asset_content_type: application/java-archive
+        name: Blender-1.${{ github.run_number }}
+        path: build/libs/*.jar
