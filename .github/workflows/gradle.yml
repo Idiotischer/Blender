@@ -8,13 +8,18 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
+
+    container:
+      image: openjdk:9-jdk
 
     steps:
     - uses: actions/checkout@v4
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+    - name: Build with Gradle
+      run: ./gradlew build
+
 
     - name: Set up JDK 17
       uses: actions/setup-java@v4
