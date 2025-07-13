@@ -33,7 +33,7 @@ dependencies {
     implementation 'org.eclipse.jgit:org.eclipse.jgit:7.1.0.202411261347-r'
 }
 
-def targetJavaVersion = 9
+def targetJavaVersion = 11
 java {
     def javaVersion = JavaVersion.toVersion(targetJavaVersion)
     sourceCompatibility = javaVersion
