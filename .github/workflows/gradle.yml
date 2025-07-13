@@ -13,39 +13,39 @@ on:
         default: 'release'
 
 jobs:
-    build:
+  build:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Install Java 9 manually
-      run: |
-        wget https://download.java.net/java/GA/jdk9/9/binaries/openjdk-9_linux-x64_bin.tar.gz
-        tar -xzf openjdk-9_linux-x64_bin.tar.gz  
-        mv jdk-9 $HOME/jdk-9
-        echo "JAVA_HOME=$HOME/jdk-9" >> $GITHUB_ENV
-        echo "$HOME/jdk-9/bin" >> $GITHUB_PATH
-        java -version
+      - name: Install Java 9 manually
+        run: |
+          wget https://download.java.net/java/GA/jdk9/9/binaries/openjdk-9_linux-x64_bin.tar.gz
+          tar -xzf openjdk-9_linux-x64_bin.tar.gz  
+          mv jdk-9 $HOME/jdk-9
+          echo "JAVA_HOME=$HOME/jdk-9" >> $GITHUB_ENV
+          echo "$HOME/jdk-9/bin" >> $GITHUB_PATH
+          java -version
 
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
 
-    - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v4
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
 
-    - name: Build with Gradle Wrapper (using Java 9)
-      run: ./gradlew clean build
+      - name: Build with Gradle Wrapper (using Java 9)
+        run: ./gradlew clean build
 
-    - name: Upload JAR artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: my-app-jar
-        path: build/libs/*.jar
+      - name: Upload JAR artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: my-app-jar
+          path: build/libs/*.jar
 
-    - name: Generate and submit dependency graph
-      uses: gradle/actions/dependency-submission@v4
+      - name: Generate and submit dependency graph
+        uses: gradle/actions/dependency-submission@v4
 
   release:
     needs: build
@@ -53,28 +53,28 @@ jobs:
     if: github.ref == 'refs/heads/master' && github.event_name == 'push'
 
     steps:
-    - name: Download JAR artifact from build job
-      uses: actions/download-artifact@v3
-      with:
-        name: my-app-jar
+      - name: Download JAR artifact from build job
+        uses: actions/download-artifact@v3
+        with:
+          name: Blender-v1.${{ github.run_number }}
 
-    - name: Create GitHub Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: v1.${{ github.run_number }}
-        release_name: Release v1.0.${{ github.run_number }}
-        draft: false
-        prerelease: false
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v1.${{ github.run_number }}
+          release_name: Release v1.0.${{ github.run_number }}
+          draft: false
+          prerelease: false
 
-    - name: Upload JAR to Release
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./my-app-jar/*.jar
-        asset_name: my-app.jar
-        asset_content_type: application/java-archive
+      - name: Upload JAR to Release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./Blender-jar/*.jar
+          asset_name: Blender-v1.${{ github.run_number }}.jar
+          asset_content_type: application/java-archive
