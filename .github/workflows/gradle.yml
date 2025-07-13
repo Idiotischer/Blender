@@ -20,13 +20,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install Java 9 manually
+      - name: Install Java 11
         run: |
           wget https://download.java.net/java/GA/jdk9/9/binaries/openjdk-9_linux-x64_bin.tar.gz
-          tar -xzf openjdk-9_linux-x64_bin.tar.gz  
-          mv jdk-9 $HOME/jdk-9
-          echo "JAVA_HOME=$HOME/jdk-9" >> $GITHUB_ENV
-          echo "$HOME/jdk-9/bin" >> $GITHUB_PATH
+          tar -xzf openjdk-11_linux-x64_bin.tar.gz  
+          mv jdk-9 $HOME/jdk-11
+          echo "JAVA_HOME=$HOME/jdk-11" >> $GITHUB_ENV
+          echo "$HOME/jdk-11/bin" >> $GITHUB_PATH
           java -version
 
       - name: Grant execute permission for gradlew
@@ -35,13 +35,13 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Build with Gradle Wrapper (using Java 9)
+      - name: Build with Gradle Wrapper (using Java 11)
         run: ./gradlew clean build
 
       - name: Upload JAR artifact
         uses: actions/upload-artifact@v4
         with:
-          name: my-app-jar
+          name: Blender-v1.${{ github.run_number }}
           path: build/libs/*.jar
 
       - name: Generate and submit dependency graph
