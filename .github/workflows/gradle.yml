@@ -29,29 +29,37 @@ jobs:
         echo "$HOME/jdk-9/bin" >> $GITHUB_PATH
         java -version
 
-    - name: Set up JDK 17
-      uses: actions/setup-java@v4
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@v4
 
-    - name: Build with Gradle Wrapper
-      run: ./gradlew build
+    - name: Build with Gradle Wrapper (using Java 9)
+      run: ./gradlew clean build
 
-    - name: Run tests
-      run: ./gradlew test
+    - name: Upload JAR artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: my-app-jar
+        path: build/libs/*.jar
 
     - name: Generate and submit dependency graph
       uses: gradle/actions/dependency-submission@v4
 
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+
+    steps:
+    - name: Download JAR artifact from build job
+      uses: actions/download-artifact@v3
+      with:
+        name: my-app-jar
+
     - name: Create GitHub Release
-      if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+      id: create_release
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -60,3 +68,13 @@ jobs:
         release_name: Release v1.0.${{ github.run_number }}
         draft: false
         prerelease: false
+
+    - name: Upload JAR to Release
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./my-app-jar/*.jar
+        asset_name: my-app.jar
+        asset_content_type: application/java-archive
