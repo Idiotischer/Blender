@@ -13,8 +13,10 @@ on:
 
 jobs:
   build:
-    if: github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' || (github.event.pull_request.merged == true)
+    outputs:
+      jar-path: ${{ steps.upload.outputs.artifact-path }}
 
     steps:
       - name: Checkout code
@@ -29,29 +31,30 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
-
-      - name: Build with Gradle Wrapper
+      - name: Build with Gradle
         run: ./gradlew clean build
 
       - name: Upload JAR artifact
+        id: upload
         uses: actions/upload-artifact@v4
         with:
           name: Blender-artifact
           path: build/libs/*.jar
 
-      - name: Generate and submit dependency graph
-        uses: gradle/actions/dependency-submission@v4
-
   release:
     needs: build
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'workflow_dispatch' || (github.event.pull_request.merged == true)
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Download JAR artifact from build job
+        uses: actions/download-artifact@v4
+        with:
+          name: Blender-artifact
+          path: ./release-jar
 
       - name: Get total number of releases
         id: release_count
@@ -61,11 +64,6 @@ jobs:
           echo "RELEASE_COUNT=$RELEASE_COUNT" >> $GITHUB_ENV
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Download JAR artifact from build job
-        uses: actions/download-artifact@v4
-        with:
-          name: Blender-artifact
 
       - name: Create GitHub Release
         id: create_release
@@ -84,6 +82,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: Blender-artifact/*.jar
+          asset_path: ./release-jar/*.jar
           asset_name: Blender-v1.${{ env.RELEASE_COUNT }}.jar
           asset_content_type: application/java-archive
