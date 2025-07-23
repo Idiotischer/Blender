@@ -38,7 +38,7 @@ jobs:
       - name: Upload JAR artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Blender-v1.${{ github.run_number }}
+          name: Blender-artifact
           path: build/libs/*.jar
 
       - name: Generate and submit dependency graph
@@ -53,10 +53,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Get total number of releases
+        id: release_count
+        run: |
+          RELEASE_COUNT=$(gh api repos/${{ github.repository }}/releases --paginate --jq 'length')
+          echo "Total releases: $RELEASE_COUNT"
+          echo "RELEASE_COUNT=$RELEASE_COUNT" >> $GITHUB_ENV
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Download JAR artifact from build job
         uses: actions/download-artifact@v4
         with:
-          name: Blender-v1.${{ github.run_number }}
+          name: Blender-artifact
 
       - name: Create GitHub Release
         id: create_release
@@ -64,8 +73,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v1.${{ github.run_number }}
-          release_name: Release v1.${{ github.run_number }}
+          tag_name: v1.${{ env.RELEASE_COUNT }}
+          release_name: Release v1.${{ env.RELEASE_COUNT }}
           draft: false
           prerelease: false
 
@@ -75,6 +84,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: Blender-v1.${{ github.run_number }}/*.jar
-          asset_name: Blender-v1.${{ github.run_number }}.jar
+          asset_path: Blender-artifact/*.jar
+          asset_name: Blender-v1.${{ env.RELEASE_COUNT }}.jar
           asset_content_type: application/java-archive
