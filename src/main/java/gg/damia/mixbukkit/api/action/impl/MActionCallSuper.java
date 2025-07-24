@@ -48,8 +48,8 @@ public class MActionCallSuper implements MixinAction {
             method.instructions.add(new VarInsnNode(Opcode.ALOAD, varNum++));
         }
         Class<?>[] parameterTypes = superMethod.getParameterTypes();
-        for (int i = 0; i < parameterTypes.length; i++) {
-            method.instructions.add(ASMUtils.loadVar(parameterTypes[i], varNum++));
+        for (Class<?> parameterType : parameterTypes) {
+            method.instructions.add(ASMUtils.loadVar(parameterType, varNum++));
         }
         method.instructions.add(new IShellCodeMethodInvoke(superMethod).generate());
         method.instructions.add(ASMUtils.genReturnNode(superMethod.getReturnType()));

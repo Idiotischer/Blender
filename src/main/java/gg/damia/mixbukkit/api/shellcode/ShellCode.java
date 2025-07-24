@@ -1,5 +1,7 @@
 package gg.damia.mixbukkit.api.shellcode;
 
+import gg.damia.mixbukkit.api.action.impl.MActionCallSuper;
+import gg.damia.mixbukkit.api.action.impl.MActionMethodReplacer;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.InsnNode;
