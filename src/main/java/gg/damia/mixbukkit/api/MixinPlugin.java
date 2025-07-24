@@ -226,7 +226,6 @@ public class MixinPlugin {
 
                 registeredMixins.add(namespace);
 
-
                 if (mixinNode != null && fieldInjection) {
                     for (FieldNode mixinField : mixinNode.fields) {
                         try {
