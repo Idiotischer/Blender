@@ -15,6 +15,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.plugin.Plugin;
 import org.objectweb.asm.*;
 import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.analysis.Analyzer;
 import org.objectweb.asm.tree.analysis.AnalyzerException;
@@ -60,7 +61,11 @@ public class MixinPlugin {
      */
     @SneakyThrows
     public boolean registerMixin(String namespace, Class<?> mixinClass, MixinAction mixinAction, Class<?> owner, String deObfMethodName, Class<?> returnType, Class<?>... arguments) {
-        return registerMixin(namespace, mixinClass, mixinAction, owner, deObfMethodName, returnType, false, arguments);
+        return registerMixin(namespace, mixinClass, mixinAction, owner, deObfMethodName, returnType, true, false, arguments);
+    }
+    @SneakyThrows
+    public boolean registerMixin(String namespace, Class<?> mixinClass, MixinAction mixinAction, Class<?> owner, String deObfMethodName, Class<?> returnType, boolean fieldInjection, Class<?>... arguments) {
+        return registerMixin(namespace, mixinClass, mixinAction, owner, deObfMethodName, returnType, fieldInjection,false, arguments);
     }
 
     /**
@@ -69,7 +74,7 @@ public class MixinPlugin {
      * double, triple etc.
      */
     @SneakyThrows
-    public boolean registerMixin(String namespace, Class<?> mixinClass, MixinAction mixinAction, Class<?> owner, String deObfMethodName, Class<?> returnType, boolean canSafelyReplaceSuperClass, Class<?>... arguments) {
+    public boolean registerMixin(String namespace, Class<?> mixinClass, MixinAction mixinAction, Class<?> owner, String deObfMethodName, Class<?> returnType, boolean fieldInjection, boolean canSafelyReplaceSuperClass, Class<?>... arguments) {
         if (registeredMixins.contains(namespace)) {
             if (MixBukkit.DEBUG) {
                 Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_GRAY + "// Mixin with namespace: " + namespace + " is already registered! Skipping...");
@@ -112,6 +117,27 @@ public class MixinPlugin {
                 classNode.interfaces.add(interfaceInternalName);
                 if (MixBukkit.DEBUG) {
                     Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_GRAY + "// Added interface " + mixinInterface.getName() + " to " + owner.getName());
+                }
+            }
+        }
+
+        ClassNode mixinNode = ClassesManager.getClassNode(mixinClass.getName());
+
+        if (mixinNode != null && fieldInjection) {
+            for (FieldNode mixinField : mixinNode.fields) {
+                boolean exists = false;
+                for (FieldNode ownerField : classNode.fields) {
+                    if (ownerField.name.equals(mixinField.name) && ownerField.desc.equals(mixinField.desc)) {
+                        exists = true;
+                        break;
+                    }
+                }
+
+                if (!exists) {
+                    classNode.fields.add(mixinField);
+                    if (MixBukkit.DEBUG) {
+                        Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_GRAY + "// Injected field " + mixinField.name + " into " + owner.getName());
+                    }
                 }
             }
         }

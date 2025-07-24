@@ -4,7 +4,7 @@ plugins {
 }
 
 group = 'gg.damia'
-version = 'B-1.0'
+version = 'B-1.0' //B für beta
 
 repositories {
     mavenCentral()
