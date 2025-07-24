@@ -241,18 +241,6 @@ public class MixinPlugin {
                     }
                 }
 
-                for (FieldNode mixinField : mixinNode.fields) {
-                    try {
-                        owner.getField(mixinField.name);
-                    } catch (NoSuchFieldException e) {
-                        if (MixBukkit.DEBUG) {
-                            Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_GRAY + "// Injection failed from" + mixinField.name + " into " + owner.getName() + ", error: " + e.getMessage());
-                        } else {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-
                 for (Class<?> mixinInterface : mixinClass.getInterfaces()) {
                     try {
                         Class<?> i = Class.forName(mixinInterface.getName());
