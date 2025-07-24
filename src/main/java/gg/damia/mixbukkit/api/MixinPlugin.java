@@ -138,6 +138,17 @@ public class MixinPlugin {
                     if (MixBukkit.DEBUG) {
                         Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_GRAY + "// Injected field " + mixinField.name + " into " + owner.getName());
                     }
+
+                    try {
+                        owner.getField(mixinField.name);
+                    } catch (NoSuchFieldException e) {
+                        if (MixBukkit.DEBUG) {
+                            Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_GRAY + "// Injection failed from" + mixinField.name + " into " + owner.getName() + ", error: " + e.getMessage());
+                        } else {
+                            e.printStackTrace();
+                        }
+                    }
+
                 }
             }
         }
@@ -214,6 +225,50 @@ public class MixinPlugin {
                 }
 
                 registeredMixins.add(namespace);
+
+
+                if (mixinNode != null && fieldInjection) {
+                    for (FieldNode mixinField : mixinNode.fields) {
+                        try {
+                            owner.getField(mixinField.name);
+                        } catch (NoSuchFieldException e) {
+                            if (MixBukkit.DEBUG) {
+                                Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_GRAY + "// Injection failed from" + mixinField.name + " into " + owner.getName() + ", error: " + e.getMessage());
+                            } else {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }
+
+                for (FieldNode mixinField : mixinNode.fields) {
+                    try {
+                        owner.getField(mixinField.name);
+                    } catch (NoSuchFieldException e) {
+                        if (MixBukkit.DEBUG) {
+                            Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_GRAY + "// Injection failed from" + mixinField.name + " into " + owner.getName() + ", error: " + e.getMessage());
+                        } else {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
+                for (Class<?> mixinInterface : mixinClass.getInterfaces()) {
+                    try {
+                        Class<?> i = Class.forName(mixinInterface.getName());
+                        if (!i.isAssignableFrom(owner)) {
+                            if (MixBukkit.DEBUG) {
+                                Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_GRAY + "// Injection failed: missing interface " + mixinInterface.getName() + " in " + owner.getName());
+                            } else {
+                                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[!] Injection failed: missing interface " + mixinInterface.getName() + " in " + owner.getName());
+                            }
+                        }
+                    } catch (ClassNotFoundException e) {
+                        Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[!] Could not check interface " + mixinInterface.getName() + " for " + owner.getName() + ": " + e.getMessage());
+                        e.printStackTrace();
+                    }
+                }
+
                 return true;
             }
         }
@@ -307,6 +362,7 @@ public class MixinPlugin {
                     e.printStackTrace();
                     Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[!] Failed to load mixin: " + plugin.getName() + ":" + namespace + ", Reason: Could not redefine class: " + owner.getSimpleName());
                 }
+
                 if (MixBukkit.DEBUG) {
                     Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_GRAY + "// Successfully hooked " + namespace);
                 }
