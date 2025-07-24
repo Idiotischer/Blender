@@ -1,0 +1,87 @@
+name: Java CI with Gradle
+
+on:
+  pull_request:
+    branches: [ "master" ]
+    types: [ closed ]
+  workflow_dispatch:
+    inputs:
+      buildType:
+        description: 'Build type'
+        required: true
+        default: 'release'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' || (github.event.pull_request.merged == true)
+    outputs:
+      jar-path: ${{ steps.upload.outputs.artifact-path }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Build with Gradle
+        run: ./gradlew clean build
+
+      - name: Upload JAR artifact
+        id: upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: Blender-artifact
+          path: build/libs/*.jar
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' || (github.event.pull_request.merged == true)
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download JAR artifact from build job
+        uses: actions/download-artifact@v4
+        with:
+          name: Blender-artifact
+          path: ./release-jar
+
+      - name: Get total number of releases
+        id: release_count
+        run: |
+          RELEASE_COUNT=$(gh api repos/${{ github.repository }}/releases --paginate --jq 'length')
+          echo "Total releases: $RELEASE_COUNT"
+          echo "RELEASE_COUNT=$RELEASE_COUNT" >> $GITHUB_ENV
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v1.${{ env.RELEASE_COUNT }}
+          release_name: Release v1.${{ env.RELEASE_COUNT }}
+          draft: false
+          prerelease: false
+
+      - name: Upload JAR to Release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./release-jar/*.jar
+          asset_name: Blender-v1.${{ env.RELEASE_COUNT }}.jar
+          asset_content_type: application/java-archive
