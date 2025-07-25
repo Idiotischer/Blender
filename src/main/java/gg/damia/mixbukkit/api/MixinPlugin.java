@@ -168,6 +168,24 @@ public class MixinPlugin {
             }
         }
 
+        if (mixinNode != null) {
+            for (MethodNode mixinMethod : mixinNode.methods) {
+                boolean exists = false;
+                for (MethodNode ownerMethod : classNode.methods) {
+                    if (ownerMethod.name.equals(mixinMethod.name) && ownerMethod.desc.equals(mixinMethod.desc)) {
+                        exists = true;
+                        break;
+                    }
+                }
+                if (!exists) {
+                    classNode.methods.add(mixinMethod);
+                    if (MixBukkit.DEBUG) {
+                        Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_GRAY + "// Injected method " + mixinMethod.name + " into " + owner.getName());
+                    }
+                }
+            }
+        }
+
         if (!mixinClass.getSuperclass().equals(Object.class) && !mixinClass.getSuperclass().equals(owner.getSuperclass())) {
             Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + "[?] Mixin superclass is " + mixinClass.getSuperclass().getName() + ", but target superclass is " + owner.getSuperclass().getName() + ". Changing superclass at runtime is not supported and will be skipped.");
         }
