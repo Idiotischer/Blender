@@ -177,6 +177,13 @@ public class MixinPlugin {
                         break;
                     }
                 }
+
+                if(deObfMethodName != null && !deObfMethodName.isEmpty()) {
+                    if (mixinMethod.name.equals(obfMethodName) && mixinMethod.desc.equals(descriptor)) {
+                        continue;
+                    }
+                }
+
                 if (!exists) {
                     classNode.methods.add(mixinMethod);
                     if (MixBukkit.DEBUG) {
