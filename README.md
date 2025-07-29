@@ -11,7 +11,6 @@
 1. Please use the following starting Flags:
 ```
 -Djdk.attach.allowAttachSelf=true
---add-opens=java.base/sun.reflect=ALL-UNNAMED
 --add-opens=java.base/java.lang=ALL-UNNAMED
 --add-opens=java.base/jdk.internal.loader=ALL-UNNAMED
 ```
