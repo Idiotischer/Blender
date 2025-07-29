@@ -17,7 +17,7 @@
 
 (Optional):
 ```
--XX:+EnableDynamicAgentLoading
+-XX:+EnableDynamicAgentLoading <- may be needed by default in a future version of java
 -Djdk.instrument.traceUsage
 ```
 
